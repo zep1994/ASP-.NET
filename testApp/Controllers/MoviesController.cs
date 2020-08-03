@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using testApp.Models;
+using testApp.ViewModels;
 
 namespace testApp.Controllers
 {
@@ -14,7 +15,18 @@ namespace testApp.Controllers
         {
             //create instance of movie
             var movie = new Movie() { Name = "Lord of the Rings" };
-            return View(movie);
+            var customers = new List<Customer>
+            {
+                new Customer { Name = "Customer1"},
+                new Customer { Name = "Customer2"}
+            };
+
+            var viewModel = new RandomMovieViewModel
+            {
+                Movie = movie,
+                Customers = customers
+            };
+            return View(viewModel);
             //return Content("Hello World");
             //return HttpNotFound();
             //return new EmptyResult();
@@ -36,6 +48,12 @@ namespace testApp.Controllers
                 sortBy = "Name";
 
             return Content(String.Format("pageIndex={0}&sortBy={1}", pageIndex, sortBy));
+        }
+
+        [Route("movies/released/{year}/{month:regex(\\d{2}):range(1,12)}")]
+        public ActionResult ByReleaseDate(int year, int month)
+        {
+            return Content(year + "/" + month);
         }
     }
 }
